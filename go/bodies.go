@@ -8,6 +8,7 @@ type Body struct {
     Radius int          `json:"radius"`
     Position [3]float64 `json:"position"`
     Velocity [3]float64 `json:"velocity"`
+    Mass float64        `json:"mass"`
 }
 
 type Collection struct {
@@ -15,13 +16,22 @@ type Collection struct {
 }
 
 func (collection *Collection) UpdateVelocity(body *Body) {
-    force := body.Velocity // easier to manipulate
+    new_velocity := body.Velocity // easier to manipulate
     for _, otherBody := range collection.Bodies {
         if otherBody != body { // check that this works!
-            // do the magic stuff with MATH!  AMAZING MATH!
+            radius := body.Dist(otherBody) / 2.0
+            r_3 = math.Pow(radius, 3.0)
+            // don't bother with self.mass so we don't have to divide it later to calculate acceleration
+            force_base := ((G * otherBody.Mass) / r_3)
+            force_x = force_base * (self.Position[0] - otherBody.Position[0])
+            force_y = force_base * (self.Position[1] - otherBody.Position[1])
+            force_z = force_base * (self.Position[2] - otherBody.Position[2])
+            new_velocity[0] += force_x
+            new_velocity[1] += force_y
+            new_velocity[2] += force_z
         }
     }
-    body.Velocity = force
+    body.Velocity = new_velocity
 }
 
 func (collection *Collection) CheckCollisions(body *Body) {

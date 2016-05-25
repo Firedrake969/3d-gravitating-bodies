@@ -7,14 +7,22 @@ class Body:
         self.radius = kwargs['radius']
         self.position = kwargs['position']
         self.velocity = kwargs['velocity']
+        self.mass = kwargs['mass']
 
     def update_velocity(self, bodies):
         new_velocity = self.velocity
-        for body in bodies:
-            if self is not body:
-                # do the math
-                # do the monster math
-                pass
+        for otherBody in bodies:
+            if self is not otherBody:
+                radius = self.dist(otherBody) / 2.0
+                r_3 = radius ** 3
+                # don't bother with self.mass so we don't have to divide it later to calculate acceleration
+                force_base = ((G * otherBody.mass) / r_3)
+                force_x = force_base * (self.position[0] - otherBody.position[0])
+                force_y = force_base * (self.position[1] - otherBody.position[1])
+                force_z = force_base * (self.position[2] - otherBody.position[2])
+                new_velocity[0] += force_x
+                new_velocity[1] += force_y
+                new_velocity[2] += force_z
         self.velocity = new_velocity
 
     def update_position(self):
@@ -22,10 +30,10 @@ class Body:
             self.position[i] += self.velocity[i]
 
     def check_collisions(self, bodies):
-        for body in bodies:
-            if self is not body:
-                if self.dist(body) < (self.radius + body.radius):
-                    # stuff
+        for otherBody in bodies:
+            if self is not otherBody:
+                if self.dist(otherBody) < (self.radius + otherBody.radius):
+                    pass
 
     def dist(self, other_body):
         dx = self.position[0] - otherBody.position[0];
