@@ -17,9 +17,9 @@ class Body:
                 r_3 = radius ** 3
                 # don't bother with self.mass so we don't have to divide it later to calculate acceleration
                 force_base = ((G * otherBody.mass) / r_3)
-                force_x = force_base * (self.position[0] - otherBody.position[0])
-                force_y = force_base * (self.position[1] - otherBody.position[1])
-                force_z = force_base * (self.position[2] - otherBody.position[2])
+                force_x = force_base * (otherBody.position[0] - self.position[0])
+                force_y = force_base * (otherBody.position[1] - self.position[1])
+                force_z = force_base * (otherBody.position[2] - self.position[2])
                 new_velocity[0] += force_x
                 new_velocity[1] += force_y
                 new_velocity[2] += force_z

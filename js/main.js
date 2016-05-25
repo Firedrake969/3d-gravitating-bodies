@@ -2,6 +2,8 @@
 
 //http://www.kevs3d.co.uk/dev/phoria/
 
+const G = 1; // todo
+
 class Body {
     constructor(radius, velocity, position, mass) {
         this.radius = radius;
@@ -17,12 +19,12 @@ class Body {
                 let r_3 = Math.pow(radius, 3)
                 // don't bother with self.mass so we don't have to divide it later to calculate acceleration
                 let force_base = ((G * otherBody.mass) / r_3)
-                let force_x = force_base * (this.position[0] - otherBody.position[0])
-                let force_y = force_base * (this.position[1] - otherBody.position[1])
-                let force_z = force_base * (this.position[2] - otherBody.position[2])
-                new_velocity[0] += force_x
-                new_velocity[1] += force_y
-                new_velocity[2] += force_z
+                let force_x = force_base * (otherBody.position[0] - this.position[0])
+                let force_y = force_base * (otherBody.position[1] - this.position[1])
+                let force_z = force_base * (otherBody.position[2] - this.position[2])
+                newVelocity[0] += force_x
+                newVelocity[1] += force_y
+                newVelocity[2] += force_z
             }
         });
         this.velocity = newVelocity;
@@ -35,7 +37,7 @@ class Body {
     checkCollisions(otherBodies) {
         otherBodies.forEach(otherBody => {
             if (otherBody != this) { // see updateVelocity's comment
-                dist = this.dist(otherBody);
+                let dist = this.dist(otherBody);
                 if (dist < this.radius + otherBody.radius) {
                     // stuffs
                 }
@@ -50,8 +52,6 @@ class Body {
     }
 }
 
-let collection = [];
-
 function cycle(collection) {
     collection.forEach(body => {
         body.updateVelocity(collection);
@@ -63,3 +63,8 @@ function cycle(collection) {
         body.checkCollisions(collection);
     });
 }
+
+let collection = [];
+collection.push(new Body(3, [0, 0, 0], [0, 0, 0], 5));
+collection.push(new Body(3, [0, 0, 0], [0, 0, 5], 5));
+collection.push(new Body(3, [0, 0, 0], [5, 0, 0], 5));
